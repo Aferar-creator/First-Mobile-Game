@@ -36,6 +36,10 @@ public class K_S_Player_Move : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
         }
-    
+        if (target.transform.position.x != transform.position.x)
+        {
+            //print("несовпадает");
+            target.transform.position = Vector3.Lerp(new Vector3(target.transform.position.x,0,target.transform.position.z),new Vector3(transform.position.x,0,transform.position.z),Time.deltaTime*5);
+        }
     }
 }
