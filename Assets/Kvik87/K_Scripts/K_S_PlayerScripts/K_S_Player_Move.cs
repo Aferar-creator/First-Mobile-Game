@@ -7,7 +7,8 @@ using UnityEngine;
 public class K_S_Player_Move : MonoBehaviour
 {
    [SerializeField] private Rigidbody _rigidbody;
-   [SerializeField] private FixedJoystick _joystick;         
+   //[SerializeField] private FixedJoystick _joystick;
+   [SerializeField] private FloatingJoystick _floatingJoystick;
    [SerializeField] private Animation _animation;
 
     [SerializeField] public float speedMove;
@@ -31,15 +32,22 @@ public class K_S_Player_Move : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        /*
         _rigidbody.velocity = new Vector3(_joystick.Horizontal* speedMove,_rigidbody.velocity.y,_joystick.Vertical* speedMove);
         if(_joystick.Horizontal!=0 || _joystick.Vertical!=0)
         {
             transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
         }
-        if (target.transform.position.x != transform.position.x)
+*/
+        _rigidbody.velocity = new Vector3(_floatingJoystick.Horizontal * speedMove, _rigidbody.velocity.y, _floatingJoystick.Vertical * speedMove);
+        if (_floatingJoystick.Horizontal != 0 || _floatingJoystick.Vertical != 0)
         {
-            //print("несовпадает");
-            target.transform.position = Vector3.Lerp(new Vector3(target.transform.position.x,0,target.transform.position.z),new Vector3(transform.position.x,0,transform.position.z),Time.deltaTime*5);
+            transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
+        }
+        if (target.transform.position.x != transform.position.x|| target.transform.position.z != transform.position.z)
+        {
+            //жвижение камеры за игроком 
+            target.transform.position = Vector3.Lerp(new Vector3(target.transform.position.x,1,target.transform.position.z),new Vector3(transform.position.x,0,transform.position.z),Time.deltaTime*5);
         }
     }
 }
