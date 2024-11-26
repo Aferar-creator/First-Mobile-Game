@@ -3,47 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-[RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
+
 public class K_S_Player_Move : MonoBehaviour
 {
-   [SerializeField] private Rigidbody _rigidbody;
-   //[SerializeField] private FixedJoystick _joystick;
-   [SerializeField] private FloatingJoystick _floatingJoystick;
-   [SerializeField] private Animation _animation;
+   [Header("Прафаб джойстика")]
+   public FloatingJoystick _floatingJoystick;
+   [Header("Скорость передвижения")]
+   public float speedMove;
+  
+   [Header("Скорость поворота")]
+    public float speedRotation;
 
-    [SerializeField] public float speedMove;
-    public GameObject target;
-    Vector3 move_point;
-    void Start()
+   [Header("Привязка камеры к игроку")]
+   public GameObject target;
+   Rigidbody _rigidbody;
+   CharacterController _characterController;
+    private void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (Vector3.Distance(gameObject.transform.position, target.transform.position) >=1f)
+        if(GetComponent<Rigidbody>()==null)
         {
-            transform.LookAt(target.transform.position);
-            transform.position = Vector3.Lerp(transform.position,target.transform.position, Time.deltaTime);
+          gameObject.AddComponent<Rigidbody>();
+          GetComponent<Rigidbody>().freezeRotation = true;        
         }
-*/
+        if(GetComponent<CharacterController>()==null)
+        {
+            gameObject.AddComponent<CharacterController>();
+            _characterController = GetComponent<CharacterController>();
+        }                
     }
     private void FixedUpdate()
     {
-        /*
-        _rigidbody.velocity = new Vector3(_joystick.Horizontal* speedMove,_rigidbody.velocity.y,_joystick.Vertical* speedMove);
-        if(_joystick.Horizontal!=0 || _joystick.Vertical!=0)
-        {
-            transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
-        }
-*/
-        _rigidbody.velocity = new Vector3(_floatingJoystick.Horizontal * speedMove, _rigidbody.velocity.y, _floatingJoystick.Vertical * speedMove);
-        if (_floatingJoystick.Horizontal != 0 || _floatingJoystick.Vertical != 0)
-        {
-            transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
-        }
+        //движение плеера
+        var movementDerection = new Vector3(_floatingJoystick.Direction.x, 0f, _floatingJoystick.Direction.y);
+        _characterController.SimpleMove(movementDerection * speedMove);
+
+        //поворот плеера
+        var targetDerection = Vector3.RotateTowards(_characterController.transform.forward, movementDerection, speedRotation * Time.deltaTime, 0.0f);
+        _characterController.transform.rotation = Quaternion.LookRotation(targetDerection);       
+      
         if (target.transform.position.x != transform.position.x|| target.transform.position.z != transform.position.z)
         {
             //жвижение камеры за игроком 
