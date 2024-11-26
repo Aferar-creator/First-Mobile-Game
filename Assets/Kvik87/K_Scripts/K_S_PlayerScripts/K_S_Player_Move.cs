@@ -9,11 +9,9 @@ public class K_S_Player_Move : MonoBehaviour
    [Header("Прафаб джойстика")]
    public FloatingJoystick _floatingJoystick;
    [Header("Скорость передвижения")]
-   public float speedMove;
-  
+   public float speedMove; 
    [Header("Скорость поворота")]
-    public float speedRotation;
-
+   public float speedRotation;
    [Header("Привязка камеры к игроку")]
    public GameObject target;
    Rigidbody _rigidbody;
@@ -31,7 +29,7 @@ public class K_S_Player_Move : MonoBehaviour
             _characterController = GetComponent<CharacterController>();
         }                
     }
-    private void FixedUpdate()
+     void Update()
     {
         //движение плеера
         var movementDerection = new Vector3(_floatingJoystick.Direction.x, 0f, _floatingJoystick.Direction.y);
