@@ -438,6 +438,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1257940465}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32bd7fca59a716a4083e0d4e82872ccf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1257940469}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32bd7fca59a716a4083e0d4e82872ccf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1257940470}
   m_SourcePrefab: {fileID: 100100000, guid: 32bd7fca59a716a4083e0d4e82872ccf, type: 3}
 --- !u!1 &1112674782
 GameObject:
@@ -463,7 +471,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1112674782}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbd81829b20b5e049b5c0e79fd2a043a, type: 3}
   m_Name: 
@@ -502,14 +510,44 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257940464}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de698d6256baf14db3ee6896805084a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 300
-  rotationSpeed: 1
+  maxRotationSpeed: 10
   tiltAngle: 20
+  rotationAcceleration: 5
+--- !u!114 &1257940469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257940464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3422595e1deb544b6754b1306db119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 300
+  rotator: {fileID: 1257940470}
+--- !u!114 &1257940470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257940464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 830d95edc21290849b9ab749d8fabfff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTiltAngle: 20
+  maxRotationSpeed: 200
+  rotationAcceleration: 1
 --- !u!1 &1484608463
 GameObject:
   m_ObjectHideFlags: 0

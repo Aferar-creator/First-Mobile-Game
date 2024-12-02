@@ -6,8 +6,11 @@ public class Ship : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed  = 20f; 
-    public float rotationSpeed = 10f;     // Скорость поворота
+    public float maxRotationSpeed = 10f;     // Скорость поворота
     public float tiltAngle = 20f;         // Угол наклона в зависимости от направления движения
+    private float currentTilt = 0f;       // Текущий наклон (для плавного изменения угла)
+    private float currentRotationSpeed = 0f; // Текущая скорость вращения
+    public float rotationAcceleration = 5f; // Ускорение вращения
 
 
     private Vector3 targetPosition;       // Целевая позиция объекта
@@ -105,8 +108,16 @@ public class Ship : MonoBehaviour
 
     private void Rotate()
     {
+        //OLD
         // Плавный поворот к целевому углу
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        // transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+        // Плавное изменение наклона с учетом ускорения
+        Quaternion targetRotation = Quaternion.Euler(0, 0, currentTilt);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, currentRotationSpeed * Time.deltaTime);
+
+        // Постепенно увеличиваем текущую скорость вращения до максимальной
+        currentRotationSpeed = Mathf.Lerp(currentRotationSpeed, maxRotationSpeed, Time.deltaTime * rotationAcceleration);
     }
 
     private void ClampToScreen()
