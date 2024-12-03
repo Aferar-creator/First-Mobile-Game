@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmoothMovementWithRotation : MonoBehaviour
+public class SmoothMovementWithRotationOld : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed = 5f;           // Скорость движения
@@ -56,6 +56,8 @@ public class SmoothMovementWithRotation : MonoBehaviour
         {
             direction = Input.mousePosition.x < Screen.width / 2 ? -1 : 1;
         }
+
+        if (direction == 0) return;
 
         // Получаем новый угол поворота от SmoothRotator
         transform.rotation = rotator.UpdateRotation(direction, Time.deltaTime);
