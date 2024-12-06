@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,12 @@ using static UnityEngine.ParticleSystem;
 
 public class K_S_Farm : MonoBehaviour
 {
-    public int rock = 0;
+    [Header("Добыча количества камня")]
+    public int stone =0;
+    int stoneQuantity;
+    [Header("Время добычи камня")]
+    public float timeRecoveryStone;
+    float timeRecovery;
     public int wood = 0;
     public int minerals = 0;
     public Text textRosk;
@@ -18,11 +24,14 @@ public class K_S_Farm : MonoBehaviour
     public GameObject rightHand;
     public GameObject hitGameObject;
     public K_S_EffectFarm effectFarm;
-    
+
+    bool stoneProduction;
+    bool woodProduction;
+
     float time_farm = 3;
     void Start()
     {
-       
+        float timeRecovery = timeRecoveryStone;
     }
 
     // Update is called once per frame
@@ -32,72 +41,60 @@ public class K_S_Farm : MonoBehaviour
     }
     private void FixedUpdate()
     {
-
         RaycastHit hit;
         
-       // Debug.DrawRay(transform.position, transform.forward - new Vector3(0, transform.position.y - 0.35f, 0), Color.green);
         if (Physics.Raycast(transform.position, transform.forward - new Vector3(0, transform.position.y-0.35f,0), out hit, 1f))
         {
-            //print("1");
-
-           
-
-            if (hit.collider.tag == "minerals" && hit.collider.gameObject.transform.position.y >= 0)
+            
+            if (hit.collider.tag == "Stone")
             {
-                OnAnimRightHand();
-                hit.collider.gameObject.transform.Translate(0, -0.5f * Time.deltaTime, 0);
-                hitGameObject.GetComponent<ParticleSystem>().maxParticles = 10;
-                if (hit.collider.gameObject.transform.position.y <= 0)
-                {
-                    minerals += 10;
-                    textMinerals.GetComponent<Text>().text = minerals.ToString();
-                    hitGameObject.GetComponent<ParticleSystem>().maxParticles = 0;
-                    hit.collider.gameObject.GetComponent<K_S_MineralsFarm>().OnFarmMineralsPlayer();
-                    rightHand.transform.rotation = new Quaternion(0, 0, 0, 0);
-                }
-
+                stoneProduction = true;
             }
-
-            if (hit.collider.tag == "rock" && hit.collider.gameObject.transform.position.y >= 0)
-            {                
-                OnAnimRightHand();
-                hit.collider.gameObject.transform.Translate(0,-0.5f*Time.deltaTime,0);
-                hitGameObject.GetComponent<ParticleSystem>().maxParticles = 10;
-                if (hit.collider.gameObject.transform.position.y<=0)
-                {
-                    rock += 10;                   
-                    textRosk.GetComponent<Text>().text = rock.ToString();
-                    hitGameObject.GetComponent<ParticleSystem>().maxParticles = 0;
-                    hit.collider.gameObject.GetComponent<K_S_RockFarm>().OnFarmRockPlayer();
-                    rightHand.transform.rotation =new Quaternion(0,0,0,0);
-                }            
-            }
-
-            if (hit.collider.tag == "woods" && hit.collider.gameObject.transform.position.y >= 0)
+            if (hit.collider.tag == "woods")
             {
-                OnAnimRightHand();
-                hit.collider.gameObject.transform.Translate(0, -0.5f * Time.deltaTime, 0);
-                hitGameObject.GetComponent<ParticleSystem>().maxParticles = 10;
-                if (hit.collider.gameObject.transform.position.y <= 0)
-                {
-                    wood += 10;
-                    textWood.GetComponent<Text>().text = wood.ToString();
-                    hitGameObject.GetComponent<ParticleSystem>().maxParticles = 0;
-                    hit.collider.gameObject.GetComponent<K_S_WoodFarm>().OnFarmWoodPlayer();
-                    rightHand.transform.rotation = new Quaternion(0, 0, 0, 0);
-
-
-                }
-            }
-          
+                woodProduction = true;
+            }  
         }
         else
         {
-            
-                                
+            stoneProduction = false;
+            timeRecovery = timeRecoveryStone;
+
+            woodProduction = false;
         }
-        
+        if(stoneProduction)
+        {
+
+            OnProductionEnter("Stone", hit.collider.gameObject.GetComponent<K_S_Stone>(), hit.collider.gameObject.GetComponent<K_S_Stone>().stones.Length);
+        }
+        if (woodProduction)
+        {
+           // OnProductionEnter("woods",1);
+           
+        }
+
     }
+    void OnProductionEnter(string nameProduction,K_S_Stone k_s_stone,int element)
+    {       
+        if (nameProduction == "Stone")
+        {
+          timeRecovery -=1*Time.deltaTime;
+
+          if(timeRecovery<=0)
+          {
+            k_s_stone.OnFarmStonesEnter();//вызов скрипт добычи Stone (камня)
+            stoneQuantity += stone;//прибавляем количество 
+            textRosk.GetComponent<Text>().text = stoneQuantity.ToString();//вывод на экран UI
+            timeRecovery = timeRecoveryStone;//зброс таймера
+          }           
+        }
+        if (nameProduction == "woods")
+        {
+           // print("добыча дерева");
+        }
+       
+    }
+    
     void OnAnimRightHand()
     {
       

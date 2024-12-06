@@ -7,6 +7,7 @@ TagManager:
   - rock
   - minerals
   - woods
+  - Stone
   layers:
   - Default
   - TransparentFX

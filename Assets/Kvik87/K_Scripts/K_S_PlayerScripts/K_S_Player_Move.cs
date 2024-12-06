@@ -27,7 +27,11 @@ public class K_S_Player_Move : MonoBehaviour
         {
             gameObject.AddComponent<CharacterController>();
             _characterController = GetComponent<CharacterController>();
-        }                
+        } 
+        else
+        {
+            _characterController = GetComponent<CharacterController>();
+        }
     }
      void Update()
     {
@@ -37,12 +41,16 @@ public class K_S_Player_Move : MonoBehaviour
 
         //поворот плеера
         var targetDerection = Vector3.RotateTowards(_characterController.transform.forward, movementDerection, speedRotation * Time.deltaTime, 0.0f);
-        _characterController.transform.rotation = Quaternion.LookRotation(targetDerection);       
-      
-        if (target.transform.position.x != transform.position.x|| target.transform.position.z != transform.position.z)
+        _characterController.transform.rotation = Quaternion.LookRotation(targetDerection);
+
+        if (target.transform.position.x != transform.position.x || target.transform.position.z != transform.position.z)
         {
             //жвижение камеры за игроком 
-            target.transform.position = Vector3.Lerp(new Vector3(target.transform.position.x,1,target.transform.position.z),new Vector3(transform.position.x,0,transform.position.z),Time.deltaTime*5);
+            target.transform.position = Vector3.Lerp(new Vector3(target.transform.position.x, 1, target.transform.position.z), new Vector3(transform.position.x, 1, transform.position.z), Time.deltaTime * 5);
         }
+    }
+    private void FixedUpdate()
+    {
+        
     }
 }
